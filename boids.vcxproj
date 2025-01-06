@@ -139,6 +139,7 @@
   <ItemGroup>
     <ClCompile Include="bird.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bird.h" />

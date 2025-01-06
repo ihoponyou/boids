@@ -18,16 +18,15 @@ int main(int argc, char* argv[])
 	SDL_Window* window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_SIDE_LENGTH, SCREEN_SIDE_LENGTH, 0);
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
 
-	// generate birds
-	std::vector<Bird*> birds{};
+	// generate flock
+	std::vector<Bird*> flock{};
 	for (int i = 0; i < INITIAL_BIRDS; i++)
 	{
 		SDL_Rect rect{ positionDistribution(generator) , positionDistribution(generator) , BIRD_SIDE_LENGTH, BIRD_SIDE_LENGTH };
 		SDL_Color color{ 255, 0, 0, 255 };
-		Vector2 velocity{ speedDistribution(generator), speedDistribution(generator) };
+		Vector2 velocity{ (double) speedDistribution(generator), (double) speedDistribution(generator) };
 
-		Bird* newBird = new Bird(rect, color, velocity);
-		birds.push_back(newBird);
+		flock.push_back(new Bird(rect, color, velocity));
 	}
 
 	Uint32 frameStart;
@@ -49,11 +48,12 @@ int main(int argc, char* argv[])
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderClear(renderer);
 		
-		// draw birds
-		for (int i{ 0 }; i < birds.size(); i++)
+		// draw flock
+		for (int i{ 0 }; i < flock.size(); i++)
 		{
-			birds[i]->update();
-			birds[i]->render(renderer);
+			// TODO: update birds using a non-updated version of the flock
+			flock[i]->update(flock);
+			flock[i]->render(renderer);
 		}
 		
 		SDL_RenderPresent(renderer);
