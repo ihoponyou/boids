@@ -1,27 +1,20 @@
 #include <SDL.h>
 #include <vector>
 #include <random>
-#include "bird.h"
+#include <cstdlib>
 
-#define TITLE "boids"
-#define SCREEN_SIDE_LENGTH 700
-#define INITIAL_BIRDS 10
-#define BIRD_WIDTH 10
-#define BIRD_HEIGHT 10
-#define FRAMES_PER_SECOND 60
-constexpr auto OPTIMAL_FRAME_DELAY = 1000 / FRAMES_PER_SECOND;
+#include "bird.h"
+#include "config.h"
 
 std::random_device randomDevice;
 std::mt19937 generator( randomDevice() );
-
-// returns an int in [0, max]
-int getRandomInt(int max)
-{
-	return generator() % max;
-}
+std::uniform_int_distribution<int> speedDistribution(-5, 5);
+std::uniform_int_distribution<int> positionDistribution(-BIRD_SIDE_LENGTH, SCREEN_SIDE_LENGTH);
 
 int main(int argc, char* argv[])
 {
+	std::srand(std::time(0));
+
 	SDL_Window* window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_SIDE_LENGTH, SCREEN_SIDE_LENGTH, 0);
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
 
@@ -29,9 +22,9 @@ int main(int argc, char* argv[])
 	std::vector<Bird*> birds{};
 	for (int i = 0; i < INITIAL_BIRDS; i++)
 	{
-		SDL_Rect rect{ getRandomInt(SCREEN_SIDE_LENGTH) , getRandomInt(SCREEN_SIDE_LENGTH) , BIRD_WIDTH, BIRD_HEIGHT};
+		SDL_Rect rect{ positionDistribution(generator) , positionDistribution(generator) , BIRD_SIDE_LENGTH, BIRD_SIDE_LENGTH };
 		SDL_Color color{ 255, 0, 0, 255 };
-		Vector2 velocity{ 1, 0 };
+		Vector2 velocity{ speedDistribution(generator), speedDistribution(generator) };
 
 		Bird* newBird = new Bird(rect, color, velocity);
 		birds.push_back(newBird);

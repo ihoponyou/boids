@@ -1,0 +1,10 @@
+#pragma once
+
+#define TITLE "boids"
+
+#define SCREEN_SIDE_LENGTH 700
+#define FRAMES_PER_SECOND 60
+constexpr auto OPTIMAL_FRAME_DELAY = 1000 / FRAMES_PER_SECOND;
+
+#define INITIAL_BIRDS 50
+#define BIRD_SIDE_LENGTH 10
